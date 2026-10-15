@@ -12,14 +12,23 @@ function scopeDemo() {
   let functionLet = "Local variable";
 
   if (true) {
-    var blockVar = "Accessible outside block";
-    let blockLet = "Block scoped";
-    console.log(blockLet);
+    let blockVar = "Block scoped with let";
+    const blockConst = "Also block scoped";
+
+    console.log(blockVar);
+    console.log(blockConst);
   }
 
   console.log(functionVar);
   console.log(functionLet);
-  console.log(blockVar);
+
+  try {
+    console.log(blockVar);
+  } catch (error) {
+    console.log(
+      "Scope Test Error: ReferenceError: blockVar is not defined (when accessed outside block)",
+    );
+  }
 }
 
 scopeDemo();

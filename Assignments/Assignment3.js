@@ -1,10 +1,17 @@
-let score = Number(prompt("Enter your test score:"));
-let grade;
+const scoreInput = prompt("Enter your test score:");
+const score = Number(scoreInput);
 
-if (score < 0 || score > 100) {
+if (
+  scoreInput === null ||
+  scoreInput.trim() === "" ||
+  !Number.isFinite(score) ||
+  score < 0 ||
+  score > 100
+) {
   console.log("Invalid score");
 } else {
-  // Determine the grade
+  let grade;
+
   if (score >= 90) {
     grade = "A";
   } else if (score >= 80) {
@@ -16,6 +23,10 @@ if (score < 0 || score > 100) {
   } else {
     grade = "F";
   }
+
+  const status = score >= 60 ? "Passed" : "Failed";
+
+  console.log("Score:", score);
 
   switch (grade) {
     case "A":
@@ -34,8 +45,5 @@ if (score < 0 || score > 100) {
       console.log("Grade: F");
   }
 
-  let status = score >= 40 ? "Passed" : "Failed";
-
-  console.log("Score:", score);
   console.log("Status:", status);
 }

@@ -2,8 +2,68 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Document</title>
-    <script src="Assignment3.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Assignment Runner</title>
   </head>
-  <body></body>
+  <body>
+    <h1>JavaScript Assignment Runner</h1>
+
+    <form id="assignment-form">
+      <label for="assignment-number">Assignment number (1–6):</label>
+      <input
+        id="assignment-number"
+        name="assignment-number"
+        type="number"
+        min="1"
+        max="6"
+        step="1"
+        value="1"
+        required
+      />
+      <button type="submit">Run Assignment</button>
+    </form>
+
+    <p id="status" role="status">Enter an assignment number and run it.</p>
+    <p>Open the browser console to see the assignment output.</p>
+
+    <script>
+      const form = document.getElementById("assignment-form");
+      const numberInput = document.getElementById("assignment-number");
+      const status = document.getElementById("status");
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        const assignmentNumber = Number(numberInput.value);
+
+        if (
+          !Number.isInteger(assignmentNumber) ||
+          assignmentNumber < 1 ||
+          assignmentNumber > 6
+        ) {
+          status.textContent = "Enter a whole number from 1 to 6.";
+          return;
+        }
+
+        const previousScript = document.getElementById("assignment-script");
+        if (previousScript) {
+          previousScript.remove();
+        }
+
+        const script = document.createElement("script");
+        script.id = "assignment-script";
+        script.src = `Assignment${assignmentNumber}.js`;
+
+        script.onload = () => {
+          status.textContent = `Assignment ${assignmentNumber} is running. Check the browser console for its output.`;
+        };
+
+        script.onerror = () => {
+          status.textContent = `Could not load Assignment ${assignmentNumber}.js.`;
+        };
+
+        document.body.appendChild(script);
+      });
+    </script>
+  </body>
 </html>

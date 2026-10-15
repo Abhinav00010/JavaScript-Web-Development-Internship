@@ -13,6 +13,7 @@ while (true) {
     console.log("Found:", num);
     break;
   }
+
   num++;
 }
 
