@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JavaScript Assignment Runner</title>
+    <style>
+      #assignment-frame {
+        position: fixed;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        border: 0;
+      }
+    </style>
   </head>
   <body>
     <h1>JavaScript Assignment Runner</h1>
@@ -24,12 +33,15 @@
     </form>
 
     <p id="status" role="status">Enter an assignment number and run it.</p>
-    <p>Open the browser console to see the assignment output.</p>
+    <p>Assignment output appears in the browser console.</p>
+
+    <div id="runner"></div>
 
     <script>
       const form = document.getElementById("assignment-form");
       const numberInput = document.getElementById("assignment-number");
       const status = document.getElementById("status");
+      const runner = document.getElementById("runner");
 
       form.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -45,24 +57,31 @@
           return;
         }
 
-        const previousScript = document.getElementById("assignment-script");
-        if (previousScript) {
-          previousScript.remove();
+        const previousFrame = document.getElementById("assignment-frame");
+        if (previousFrame) {
+          previousFrame.remove();
         }
 
-        const script = document.createElement("script");
-        script.id = "assignment-script";
-        script.src = `Assignment${assignmentNumber}.js`;
+        const frame = document.createElement("iframe");
+        frame.id = "assignment-frame";
+        frame.title = `Assignment ${assignmentNumber} runner`;
 
-        script.onload = () => {
-          status.textContent = `Assignment ${assignmentNumber} is running. Check the browser console for its output.`;
+        frame.onload = () => {
+          const assignmentScript =
+            frame.contentDocument.createElement("script");
+
+          assignmentScript.src = `Assignment${assignmentNumber}.js`;
+
+          assignmentScript.onerror = () => {
+            status.textContent = `Could not load Assignment ${assignmentNumber}.js.`;
+          };
+
+          frame.contentDocument.body.appendChild(assignmentScript);
+          status.textContent = `Running Assignment ${assignmentNumber}. Check the browser console for output.`;
         };
 
-        script.onerror = () => {
-          status.textContent = `Could not load Assignment ${assignmentNumber}.js.`;
-        };
-
-        document.body.appendChild(script);
+        frame.src = "about:blank";
+        runner.appendChild(frame);
       });
     </script>
   </body>
